@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering Website</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .order-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Food Ordering Menu</h1>
+    <div id="menu"></div>
+    <button class="order-button" onclick="submitOrder()">Order Now</button>
+
+    <script>
+        const menuItems = [
+            { name: "Burger", price: 5.99 },
+            { name: "Pizza", price: 8.99 },
+            { name: "Salad", price: 4.99 },
+            { name: "Fries", price: 2.99 },
+            { name: "Soda", price: 1.99 }
+        ];
+
+        const order = {};
+
+        function renderMenu() {
+            const menuDiv = document.getElementById("menu");
+            menuItems.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "menu-item";
+                itemDiv.innerHTML = `
+                    <span>${item.name} - $${item.price.toFixed(2)}</span>
+                    <input type="number" min="0" value="0" onchange="updateOrder('${item.name}', this.value)">
+                `;
+                menuDiv.appendChild(itemDiv);
+            });
+        }
+
+        function updateOrder(itemName, quantity) {
+            order[itemName] = parseInt(quantity);
+        }
+
+        function submitOrder() {
+            const orderData = Object.entries(order)
+                .filter(([_, quantity]) => quantity > 0)
+                .map(([item, quantity]) => ({ item, quantity }));
+
+            if (orderData.length === 0) {
+                alert("Please select at least one item to order.");
+                return;
+            }
+
+            const csv = Papa.unparse(orderData);
+            const encodedCsv = encodeURIComponent(csv);
+            const googleSheetUrl = `https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse?usp=pp_url&entry.ENTRY_ID=${encodedCsv}&submit=Submit`;
+
+            fetch(googleSheetUrl, { mode: 'no-cors' })
+                .then(() => {
+                    alert("Order submitted successfully!");
+                })
+                .catch(error => {
+                    console.error("Error submitting order:", error);
+                    alert("There was an error submitting your order. Please try again.");
+                });
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>

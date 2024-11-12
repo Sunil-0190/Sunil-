@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>MyOnlineMeals.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="shortcut icon" href="https://img.icons8.com/doodle/40/hamburger.png" type="image/x-icon">
+   
+</head>
+<body>
+    <nav id="navbar">
+        <div class="container">
+            <h1 class="logo">MyOnlineMeals</h1>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#clients">Our Clients</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="container">
+            <h1>Welcome to MyOnlineMeal</h1>
+            <p>Find nutritious options that don't compromise on taste</p>
+            <p>We believe healthy food can be delicious too</p>
+            <a href="Ordering_page.html" class="btn">Order now</a>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class = 'fixing'></div>
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="service-box">
+                <img src="https://th.bing.com/th/id/OIP.u1OUWWRwtR3pLwQ2IgcqRwHaEw?w=259&h=180&c=7&r=0&o=5&pid=1.7" />
+                <h3>Food Catering</h3>
+                <p>We believe that every event deserves delicious food that leaves a lasting impression.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://th.bing.com/th/id/OIP.9C74BzslmPhnUKShZERU7gHaFj?w=274&h=182&c=7&r=0&o=5&pid=1.7" />
+                <h3>Bulk Ordering</h3>
+                <p>We specialize in bulk ordering to help you provide delicious meals for any occasion.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://th.bing.com/th?id=OIP.cTeXuwxDltd31eJriV7tKAHaFM&w=298&h=209&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2" alt="">
+                <h3>Food Ordering</h3>
+                <p>We make food ordering simple and enjoyable. Whether you're dining in, taking out, or having it delivered.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="clients">
+        <div class = 'fixing'></div>
+        <div class="container">
+            <h2>Our Clients</h2>
+            <img src="https://static.vecteezy.com/system/resources/previews/026/783/205/original/kfc-logo-editorial-free-vector.jpg" alt="Client 1" class="client-logo">
+            <img src="https://th.bing.com/th/id/OIP.ObAraorJjrQuqU8hiJvJTgHaEK?w=212&h=180&c=7&r=0&o=5&pid=1.7" alt="Client 2" class="client-logo">
+            <img src="https://th.bing.com/th?id=OIP.L3hECHubjXFR7l4nVAX3XQHaE_&w=304&h=205&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2" alt="Client 3" class="client-logo">
+            <img src="https://th.bing.com/th?id=OIP.TF99Kgr99iiSSzJo8K5etwHaDj&w=349&h=168&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2" alt="Client 4" class="client-logo">
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class = 'fixing'></div>
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form id="submit-form" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name" placeholder="Enter Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" name="phone" id="phone" placeholder="Enter Your Phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea name="message" id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MyOnlineMeals.com. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Your existing script remains unchanged
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzmvls7_KE6DH9ZJn_W-Z42uuDS4a_UgHdbHOhb4iR0gRKpo9bwWdt_FFDd8PKxQK_jIg/exec'
+const form = document.getElementById('submit-form')
+
+form.addEventListener('submit', e => {
+  e.preventDefault()
+  fetch(scriptURL, { 
+    method: 'POST', 
+    body: new FormData(form)
+  })
+    .then(response => response.json())
+    .then(data => {
+      alert("Thank you! Your form is submitted successfully.");
+      form.reset();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("There was an error submitting your form. Please try again.");
+    });
+})
+    </script>
+</body>
+</html>

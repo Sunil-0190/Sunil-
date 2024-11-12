@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order Menu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=64&id=G736SmolvT3J&format=png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .order-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+        .Back-button {
+            margin: 1rem;
+        }
+        .Back-button button{
+            background-color: #4CAF50;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="Back-button">        
+        <button id="back-btn">Back</button>
+    </div>
+    <h1>By Your Choice</h1>
+    
+    <div id="menu"></div>
+    <button class="order-button" onclick="submitOrder()">Order Now</button>
+
+    <script>
+        const backBtn = document.getElementById('back-btn');
+        backBtn.addEventListener('click', handleBack);
+        function handleBack () {
+            window.location.href="index.html";
+        }
+        const menuItems = [
+            { name: "Afgani chap", price: 100 },
+            { name: "Aloo Chap", price: 120 },
+            { name: "Burger", price: 60 },
+            { name: "Butter Chola", price: 80 },
+            { name: "Chessecake", price: 350 },
+            { name: "Cake", price: 250 },
+            { name: "Cookies", price: 50},
+            { name: "Chaat", price: 50 },
+            { name: "Energy Drinks", price: 180 },
+            { name: "French Fries", price: 80 },
+            { name: "Momos", price: 70 },
+            { name: "Noodles", price: 90 },
+            { name: "Pasta", price: 110 },
+            { name: "Sandwich", price: 50 },
+            { name: "Soda", price: 40 },
+            { name: "Salad", price: 20 }
+        ];
+
+        const order = {};
+
+        function renderMenu() {
+            const menuDiv = document.getElementById("menu");
+            menuItems.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "menu-item";
+                itemDiv.innerHTML = `
+                    <span>${item.name} - ₹${item.price.toFixed(2)}</span>
+                    <input type="number" min="0" value="0" onchange="updateOrder('${item.name}', this.value)">
+                `;
+                menuDiv.appendChild(itemDiv);
+            });
+        }
+
+        function updateOrder(itemName, quantity) {
+            order[itemName] = parseInt(quantity);
+        }
+
+        function submitOrder() {
+    const orderData = Object.entries(order)
+        .filter(([_, quantity]) => quantity > 0)
+        .map(([item, quantity]) => [item, quantity]); // Changed to array format
+
+    if (orderData.length === 0) {
+        alert("Please select at least one item to order.");
+        return;
+    }
+
+    const csv = Papa.unparse(orderData);
+    const formData = new FormData();
+    formData.append('orderData', csv);
+
+    fetch('https://script.google.com/macros/s/AKfycbzmvls7_KE6DH9ZJn_W-Z42uuDS4a_UgHdbHOhb4iR0gRKpo9bwWdt_FFDd8PKxQK_jIg/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Order submitted successfully!");
+        // Reset all quantity inputs
+        document.querySelectorAll('.menu-item input').forEach(input => input.value = 0);
+        Object.keys(order).forEach(key => delete order[key]);
+    })
+    .catch(error => {
+        console.error("Error submitting order:", error);
+        alert("There was an error submitting your order. Please try again.");
+    });
+}
+
+        renderMenu();
+    </script>
+</body>
+</html>
